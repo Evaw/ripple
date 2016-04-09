@@ -45,11 +45,23 @@
     if (changeInfo.status === 'complete') {
       setContentScriptIsOn(tabId);
       setIconState(tabId);
+
+
+      chrome.storage.sync.get({
+        color: '#cc0000',
+        radius: 20,
+        duration: 500,
+        ripplecount: 2,
+        transition: 'quad-out'
+      }, function (items) {
+        chrome.tabs.sendMessage(tabId, {
+          op: 'options',
+          value: items
+        });
+      });
     }
   });
   chrome.tabs.onActivated.addListener(function (activeInfo) {
     setContentScriptIsOn(activeInfo.tabId);
   });
-
-
 }(this));

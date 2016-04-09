@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>My Test Extension Options</title>
+  <style type="text/css">
+  #status {
+    height: 1.2em;
+  }
+  select {
+    width: 100%;
+  }
+  .main {
+    display: flex;
+  }
+  .label {
+    text-align: right;
+  }
+  .inputs-container {
+    flex: 2;
+  }
+  .sample-container {
+    flex: 1;
+    min-width: 264px;
+  }
+  .sample-container {
+    border: 1px solid;
+    text-align: center;
+  }
+  .dirty {
+    background: #6599ce;
+    color: #fff;
+    text-shadow: #191919 0 1px;
+  }
+  </style>
+</head>
+<body>
+<div class="main">
+  <div class="inputs-container">
+    <table>
+      <tr>
+        <th class="label"><label for="color">Color</th>
+        <td>
+          <input id="color" type="color"></input>
+        </td>
+      </tr>
+      <tr>
+        <th class="label"><label for="radius">
+          radius (pixels)
+        </th>
+        <td>
+          <input id="radius" type="number"></input>
+        </td>
+      </tr>
+      <tr>
+        <th class="label"><label for="duration">
+          duration (ms)
+        </th>
+        <td>
+          <input id="duration" type="number"></input>
+        </td>
+      </tr>
+      <tr>
+        <th class="label"><label for="ripplecount">
+          ripple count
+        </th>
+        <td>
+          <input id="ripplecount" type="number" min="1"></input>
+        </td>
+      </tr>
+      <tr>
+        <th class="label"><label for="transition">transition</th>
+        <td>
+          <select id="transition">
+           <option value="quad-in">quad-in</option>
+           <option value="quad-out">quad-out</option>
+           <option value="circ-out">circ-out</option>
+           <option value="cubic-in">cubic-in</option>
+           <option value="cubic-out">cubic-out</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="sample-container">
+    <span class="sample">
+      click me for sample
+    </span>
+  </div>
+</div>
+<div>
+  <button id="save">Save</button>
+  <button id="reset">Reset to default</button>
+  <div id="status"></div>
+</div>
+<script src="options.js"></script>
+<script charset="utf-8" src="node_modules/d3/d3.js"></script>
+<script type="text/javascript" src="content-script.js"></script>
+</body>
+</html>

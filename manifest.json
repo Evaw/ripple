@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "ripple",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "icons": {
     "48": "icon48.png",
     "128": "icon128.png"
@@ -17,11 +17,16 @@
   "background": {
     "scripts": ["popup.js"]
   },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "browser_action": {
     "default_icon": "iconoff128.png",
     "__default_popup": "popup.html"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage"
   ]
 }

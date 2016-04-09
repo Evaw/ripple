@@ -6,7 +6,11 @@
   d3:false*/
 (function (window) {
   'use strict';
-  var r = 35;
+  var r = 20;
+  var color = '#cc0000';
+  var duration = 500;
+  var transition = 'quad-out';
+  var ripplecount = 2;
   var svg = d3.select('html')
           .append('svg')
           .attr('id', 'ripple-extension-svg')
@@ -20,23 +24,29 @@
           .style('left', 0)
           .style('pointer-events', 'none');
 
-  var positionLabel = svg.append("text")
-          .attr("x", 10)
-          .attr("y", 30);
-
   var isOn = false;
+  function setOptions(opts) {
+    color = opts.color;
+    r = opts.radius;
+    duration = opts.duration;
+    transition = opts.transition;
+    ripplecount = opts.ripplecount;
+  }
   chrome.runtime.onMessage.addListener(function (request) {
     if (request.op === 'switch') {
       isOn = request.value;
     }
+    if (request.op === 'options') {
+      setOptions(request.value);
+    }
   });
-  document.body.addEventListener("click", function (ev) { //<-D
+  function showRipple(ev) { //<-D
     var i;
     if (!isOn) {
       return;
     }
     d3.select("body").style('height', '100%');
-    for (i = 0; i < 3; i += 1) {
+    for (i = 0; i < ripplecount; i += 1) {
         //var position = d3.mouse(svg.node());
         let position = [ev.clientX, ev.clientY];
         let circle = svg.append("circle")
@@ -44,35 +54,28 @@
                 .attr("cy", position[1])
                 .attr("r", 0)
                 .style('fill', 'none')
-                .style('stroke', '#cc0000')
-                .style("stroke-width", 5 / (i))
+                .style('stroke',color)
+                .style("stroke-width", 3 / (i + 1))
                 .transition()
-                    .delay(Math.pow(i, 2.5) * 50)
-                    .duration(600)
-                    .ease('quad-out')
+                    .delay(Math.pow(i, 1.1) * duration/ripplecount/2)
+                    .duration(duration)
+                    .ease(transition)
                 .attr("r", r)
                 .style("stroke-opacity", 0)
                 .each("end", function () {
                     d3.select(this).remove();
                 });
     }
-  }, true);
+  }
+  document.body.addEventListener("click", showRipple, true);
+  if (window.RippleOptionsPage) {
+    RippleOptionsPage.pubsub.sub('optionsChanged', function (opts) {
+      setOptions(opts);
+    });
+    RippleOptionsPage.optionsPromise.then(function (opts) {
+      setOptions(opts);
+    });
+    isOn = true;
 
-  /*
-    body {
-            font-family: "helvetica";
-            height: 100%;
-    }
-
-    svg {
-      pointer-events: none;
-      width: 100%;
-      height: 100%;
-    }
-
-    circle {
-      fill: none;
-      stroke: #cc0000;
-    }
-  */
+  }
 }(this));
